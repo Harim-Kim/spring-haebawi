@@ -8,6 +8,7 @@ class BoardApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

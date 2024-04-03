@@ -1,10 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+
 </body>
+    <form th:method="post" th:action="|/board/create|" th:object="${boardRequest}">
+        <div>
+            <label th:for="title">제목 : </label>
+            <input type="text" th:field="*{title}" th:errorclass="error-input"/>
+            <div class="error-class" th:errors="*{title}"></div>
+        </div>
+        <br/>
+        <div>
+            <label th:for="content">내용 : </label>
+            <input type="text" th:field="*{content}" th:errorclass="error-input"/>
+            <div class="error-class" th:errors="*{content}"></div>
+        </div>
+        <br/>
+<!--        <div>-->
+<!--            <label th:for="passwordCheck">비밀번호 체크 : </label>-->
+<!--            <input type="hidden" th:field="*{passwordCheck}" th:errorclass="error-input"/>-->
+<!--            <div class="error-class" th:errors="*{passwordCheck}"></div>-->
+<!--        </div>-->
+        <br/>
+<!--        <div>-->
+<!--            <label th:for="nickname">닉네임 : </label>-->
+<!--            <input type="text" th:field="*{nickname}" th:errorclass="error-input"/>-->
+<!--            <div class="error-class" th:errors="*{nickname}"></div>-->
+<!--        </div>-->
+        <br/>
+        <button type="submit">작성</button>
+    </form>
 </html>

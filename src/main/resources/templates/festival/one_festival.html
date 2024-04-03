@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+<body>
+    <h1 th:text="${festivalResponse.name}"></h1>
+    <div>
+        <span th:text="${festivalResponse.updated_at}"></span>
+    </div>
+    <div>
+        <span th:text="${festivalResponse.day}"></span>
+    </div>
+    <div>
+        <a href="/board">목록으로</a>
+    </div>
+
+    <th:block th:if="${error}">
+        <p th:text="${error}"> </p>
+    </th:block>
+    <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name())}">
+        <div>
+            <form action="#" th:action="|/festival/${festivalResponse.id}|" method="#" th:method="delete">
+                <button type="submit" class="badge">삭제</button>
+            </form>
+            <a data-confirm="Are you sure?" th:href="@{/festival/{id}/update(id=${festivalResponse.id})}" rel="nofollow">update</a>
+            <a data-confirm="Are you sure?" th:href="@{/festival/{id}/team(id=${festivalResponse.id})}" rel="nofollow">팀 등록</a>
+        </div>
+    </th:block>
+
+    <div>
+        <p th:text="${festivalResponse.description}"></p>
+    </div>
+
+
+<!--    <div class="card">-->
+<!--        <form th:method="post" th:action="|/board/${boardResponse.id}/reply|" th:object="${replyRequest}">-->
+<!--&lt;!&ndash;            <input type="hidden"  th:field="*{userId}"  th:value="${currentUser.getId()}">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="hidden"  th:field="*{boardId}"  th:value="${boardResponse.getId()}">&ndash;&gt;-->
+<!--            <div class="card-body">-->
+<!--                <label th:for="content">내용 : </label>-->
+<!--                <textarea id="content" th:field="*{content}" class="form-control" rows="1"></textarea>-->
+<!--            </div>-->
+<!--            <div class="card-footer">-->
+<!--                <button type="submit">등록</button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+    <br>
+
+    <div class="card">
+        <div class="card-header">팀 목록</div>
+        <ul id="comment--box" class="list-group">
+            <th:block th:if="${festivalResponse.team}">
+                <th:block th:each="team : ${festivalResponse.team}">
+                    <li id="comment--1" class="list-group-item d-flex justify-content-between">
+                        <div><p th:text="${team.team_name}"></p> </div>
+                        <div class="d-flex">
+<!--                            <div class="">작성자: <span th:text="${reply.user.nickname}"></span></div>-->
+                            <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name())}">
+                                <form action="#" th:action="|/festival/${festivalResponse.id}/team/${team.id}|" method="#" th:method="delete">
+                                    <button type="submit" class="badge">삭제</button>
+                                </form>
+                            </th:block>
+                        </div>
+                    </li>
+                </th:block>
+            </th:block>
+        </ul>
+    </div>
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</body>
+</html>

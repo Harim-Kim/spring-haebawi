@@ -62,9 +62,9 @@ public class SessionLoginController {
             bindingResult.addError(new FieldError("joinRequest", "loginId", "로그인 아이디가 중복됩니다."));
         }
         // 닉네임 중복 체크
-        if(userService.checkNicknameDuplicate(joinRequest.getNickname())) {
-            bindingResult.addError(new FieldError("joinRequest", "nickname", "닉네임이 중복됩니다."));
-        }
+//        if(userService.checkNicknameDuplicate(joinRequest.getNickname())) {
+//            bindingResult.addError(new FieldError("joinRequest", "nickname", "닉네임이 중복됩니다."));
+//        }
         // password와 passwordCheck가 같은지 체크
         if(!joinRequest.getPassword().equals(joinRequest.getPasswordCheck())) {
             bindingResult.addError(new FieldError("joinRequest", "passwordCheck", "바밀번호가 일치하지 않습니다."));

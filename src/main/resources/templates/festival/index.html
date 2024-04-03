@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>게시판 목록</h1>
+<div class="container">
+    <a href="/board/create">게시물 작성</a>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>대회명</th>
+            <th>대회 날짜</th>
+            <th>작성일</th>
+        </tr>
+        <tr th:each="festival : ${festivals}">
+
+            <td th:text="${festival.id}"></td>
+            <td><a th:href="@{/festival/{id}(id=${festival.id})}"><span th:text="${festival.name}"></span></a></td>
+            <td th:text="${festival.day}"></td>
+            <td th:text="${festival.created_at}"></td>
+        </tr>
+
+    </table>
+    <ul>
+        <th:block th:unless="${festivals.first}">
+            <li>
+                <a class="page-link" th:href="@{/festivals?page={number}(number=${festivals.number-1})}">이전</a>
+            </li>
+        </th:block>
+        <th:block th:unless="${festivals.last}">
+            <li>
+                <a class="page-link" th:href="@{/festivals?page={number}(number=${festivals.number-1})}">다음</a>
+            </li>
+        </th:block>
+    </ul>
+
+
+
+</div>
+</body>
+</html>
