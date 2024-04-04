@@ -1,5 +1,6 @@
 package haebawi.board.controller;
 
+import haebawi.board.domain.UserRole;
 import haebawi.board.domain.dto.JoinRequest;
 import haebawi.board.domain.dto.LoginRequest;
 import haebawi.board.service.UserService;
@@ -15,12 +16,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class SecurityLoginController {
     private final UserService userService;
-
+    private static String[] admin_id = {"admin1", "admin2", "admin3", "admin4", "admin5"};
+    private static ArrayList<String> admins = new ArrayList<>(Arrays.asList(admin_id));
     @GetMapping(value = {"", "/"})
     public String home(Model model, Authentication auth) {
         model.addAttribute("loginType", "user");
@@ -66,7 +71,11 @@ public class SecurityLoginController {
         if(bindingResult.hasErrors()) {
             return "join";
         }
-
+        if(admins.contains(joinRequest.getLoginId())){
+            joinRequest.setUserRole(UserRole.ADMIN);
+        }else{
+            joinRequest.setUserRole(UserRole.USER);
+        }
         userService.join2(joinRequest);
         return "redirect:/user";
     }

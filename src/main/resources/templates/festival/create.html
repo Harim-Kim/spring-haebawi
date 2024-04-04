@@ -19,6 +19,11 @@
             <div class="error-class" th:errors="*{day}"></div>
         </div>
         <div>
+            <label th:for="day">section 수 : </label>
+            <input type="number" th:field="*{section_num}" th:errorclass="error-input" min="1" />
+            <div class="error-class" th:errors="*{section_num}"></div>
+        </div>
+        <div>
             <label th:for="description">설명 : </label>
             <input type="text" th:field="*{description}" th:errorclass="error-input"/>
             <div class="error-class" th:errors="*{description}"></div>

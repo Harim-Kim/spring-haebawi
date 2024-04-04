@@ -16,7 +16,8 @@
         <br/>
         <div>
             <label th:for="content">내용 : </label>
-            <input type="text" th:field="*{content}" th:errorclass="error-input"/>
+            <textarea id="content" th:field="*{content}"  th:errorclass="error-input" class="form-control" rows="1"></textarea>
+<!--            <input type="text" th:field="*{content}" th:errorclass="error-input"/>-->
             <div class="error-class" th:errors="*{content}"></div>
         </div>
         <br/>

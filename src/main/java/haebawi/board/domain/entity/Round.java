@@ -2,10 +2,7 @@ package haebawi.board.domain.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 /*
@@ -16,17 +13,16 @@ Team - User - 유저당 10개 라운드 이런식
  */
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Where( clause = "deleted_at IS NULL")
+//@Where( clause = "deleted_at IS NULL")
 public class Round {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
 
     @Column
     private int tries;
@@ -34,14 +30,24 @@ public class Round {
     @Column
     private boolean success;
 
+    @Column
+    private int festival_score;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="user_id")
+//    private User user;
+
+    @Column
+    private Long user_id;
+
+    @Column
+    private String member_name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
-    private User user;
+    @JoinColumn(name="TEAM_ID")
+    private Team team;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="SECTION_ID")
-    private Section section;
-
+    @Column
+    private Long section_id;
 
 }

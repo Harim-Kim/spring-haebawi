@@ -16,14 +16,16 @@ public class FestivalRequest {
     private Long id;
     private String name, description;
     private LocalDateTime createdAt, updatedAt, deletedAt, day;
+    private int section_num;
 
     @Builder
-    public FestivalRequest(Long id, String name, LocalDateTime createdAt, LocalDateTime day, String description){
+    public FestivalRequest(Long id, String name, LocalDateTime createdAt, LocalDateTime day, String description, int section_num){
         this.id = id;
         this.name = name;
         this.day = day;
         this.description = description;
         this.createdAt = createdAt;
+        this.section_num = section_num;
     }
 
     public Festival toEntity(){
@@ -33,6 +35,7 @@ public class FestivalRequest {
                 .day(day)
                 .description(description)
                 .created_at(LocalDateTime.now())
+                .section_num(section_num)
                 .build();
     }
 }

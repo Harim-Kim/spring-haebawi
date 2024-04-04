@@ -38,8 +38,8 @@ public class GradeGroup {
     @OneToMany(mappedBy = "gradeGroup", fetch = FetchType.LAZY)
     private List<User> users = new ArrayList<>();
 
-    @OneToMany(mappedBy = "gradeGroup", fetch = FetchType.LAZY)
-    private List<Section> sections = new ArrayList<>();
+//    @OneToMany(mappedBy = "gradeGroup", fetch = FetchType.LAZY)
+//    private List<Section> sections = new ArrayList<>();
 
 
 }

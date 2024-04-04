@@ -2,12 +2,8 @@ package haebawi.board.controller;
 
 
 import haebawi.board.domain.UserRole;
-import haebawi.board.domain.dto.BoardRequest;
-import haebawi.board.domain.dto.FestivalRequest;
-import haebawi.board.domain.dto.ReplyRequest;
-import haebawi.board.domain.entity.Board;
-import haebawi.board.domain.entity.Festival;
-import haebawi.board.domain.entity.User;
+import haebawi.board.domain.dto.*;
+import haebawi.board.domain.entity.*;
 import haebawi.board.service.FestivalService;
 import haebawi.board.service.UserService;
 import jakarta.validation.Valid;
@@ -33,8 +29,10 @@ public class FestivalController {
     private final FestivalService festivalService;
 
     @GetMapping({"","/"})
-    public String indexList(Model model, @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable){
+    public String indexList(Model model, @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable, Principal principal){
         model.addAttribute("festivals", festivalService.festivalList(pageable));
+        User user = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", user);
         return "festival/index";
     }
 
@@ -76,9 +74,10 @@ public class FestivalController {
         model.addAttribute("festivalResponse", festival); // 이미 team을 가지고 있음.
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("teamRequest", new TeamRequest());
 //        model.addAttribute("sectionRequest", new SectionRequest());
-//        model.addAttribute("teamRequest", new TeamRequest());
-        return "board/one_festival";
+
+        return "festival/one_festival";
     }
 
     /*
@@ -133,5 +132,55 @@ public class FestivalController {
     /*
     Team 생성
      */
-    @GetMapping("/{festivalId}/team")
+    @PostMapping("/{festivalId}/team")
+    public String teamSave(@PathVariable("festivalId") Long festivalId,@Valid TeamRequest teamRequest, Principal principal, RedirectAttributes redirectAttributes){
+        User currentUser = userService.getLoginUserByLoginId(principal.getName());
+        if(currentUser.getRole() != UserRole.ADMIN){
+            redirectAttributes.addAttribute("festivalId", festivalId);
+            return "redirect:/festival/{festivalId}";
+        }
+        teamRequest.setFestivalId(festivalId);
+        festivalService.teamSave(teamRequest);
+        redirectAttributes.addAttribute("festivalId", festivalId);
+        return "redirect:/festival/{festivalId}";
+
+    }
+
+    /*
+    팀 상세 보기
+     */
+    @GetMapping("/{festivalId}/team/{teamId}")
+    public String teamView(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId,Model model, Principal principal){
+        User user = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", user);
+        Team team = festivalService.team(teamId);
+        model.addAttribute("teamResponse", team);
+        model.addAttribute("festivalId", festivalId);
+        Festival festival = festivalService.getFestivalById(festivalId);
+        model.addAttribute("sectionNum", festival.getSection_num());
+        return "festival/one_team";
+    }
+
+    /*
+    점수 입력
+     */
+
+    @GetMapping("/{festivalId}/team/{teamId}/score")
+    public String scoreInput(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId, @RequestParam("section") int sectionNum, @RequestParam("index") int indexNum, Model model, Principal principal){
+        User user = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("festivalId", festivalId);
+        model.addAttribute("teamId", teamId);
+        model.addAttribute("currentUser", user);
+        model.addAttribute("scoreRequest", new ScoreInputFestivalRequest());
+        model.addAttribute("sectionNum", sectionNum);
+        model.addAttribute("indexNum", indexNum);
+        return "festival/score_input";
+    }
+
+    @PostMapping("/{festivalId}/team/{teamId}/score")
+    public void scoreUpdate(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId, @Valid ScoreInputFestivalRequest  scoreInputFestivalRequest){
+        scoreInputFestivalRequest.setFestivalId(festivalId);
+        scoreInputFestivalRequest.setTeamId(teamId);
+        festivalService.scoreUpdate(scoreInputFestivalRequest);
+    }
 }

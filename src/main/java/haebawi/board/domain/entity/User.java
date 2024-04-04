@@ -19,7 +19,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Where( clause = "deleted_at IS NULL")
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,9 +47,9 @@ public class User {
     @JoinColumn(name="GRADEGROUP_ID")
     private GradeGroup gradeGroup;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="TEAM_ID")
-    private Team team;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name="TEAM_ID")
+//    private Team team;
 
     private UserRole role;
 

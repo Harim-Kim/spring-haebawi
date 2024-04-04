@@ -45,7 +45,7 @@ public class Competition {
     private LocalDateTime day;
     // 게시판의 댓글 처럼 --> User 가 많이 등록되는 느낌으로 가고
     // user - competition - score는 어케 연결하지?
-    @OneToMany(mappedBy = "competion", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
-    @JsonIgnoreProperties({"competion"})
+    @OneToMany(mappedBy = "competition", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
+    @JsonIgnoreProperties({"competition"})
     private List<GradeGroup> gradeGroup = new ArrayList<>();;
 }

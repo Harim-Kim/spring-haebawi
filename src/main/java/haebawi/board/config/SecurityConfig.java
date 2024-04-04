@@ -36,6 +36,7 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/user/info").authenticated()
+                        .requestMatchers("/festival/**").authenticated()
                         .requestMatchers("/board/**").authenticated()
                         .requestMatchers("/user/admin/**").hasAnyAuthority(UserRole.ADMIN.name())
                         .anyRequest().permitAll()

@@ -21,13 +21,15 @@ public class JoinRequest {
     @NotBlank(message = "닉네임이 비어있습니다.")
     private String nickname;
 
+    private UserRole userRole;
+
     // 비밀번호 암호화 X
     public User toEntity() {
         return User.builder()
                 .loginId(this.loginId)
                 .password(this.password)
                 .nickname(this.nickname)
-                .role(UserRole.USER)
+                .role(this.userRole)
                 .build();
     }
 
@@ -37,7 +39,7 @@ public class JoinRequest {
                 .loginId(this.loginId)
                 .password(encodedPassword)
                 .nickname(this.nickname)
-                .role(UserRole.USER)
+                .role(this.userRole)
                 .build();
     }
 

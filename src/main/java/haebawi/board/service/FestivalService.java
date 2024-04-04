@@ -3,9 +3,9 @@ package haebawi.board.service;
 import haebawi.board.domain.UserRole;
 import haebawi.board.domain.dto.BoardRequest;
 import haebawi.board.domain.dto.FestivalRequest;
-import haebawi.board.domain.entity.Board;
-import haebawi.board.domain.entity.Festival;
-import haebawi.board.domain.entity.User;
+import haebawi.board.domain.dto.ScoreInputFestivalRequest;
+import haebawi.board.domain.dto.TeamRequest;
+import haebawi.board.domain.entity.*;
 import haebawi.board.repository.FestivalRepository;
 import haebawi.board.repository.RoundRepository;
 import haebawi.board.repository.TeamRepository;
@@ -17,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -79,4 +82,61 @@ public class FestivalService {
         return festivalId;
     }
 
+    // Team 등록 --> round도 등록
+    @Transactional
+    public void teamSave(TeamRequest teamRequest){
+        Festival festival = festivalRepository.findById(teamRequest.getFestivalId()).orElseThrow(()->{
+            return new IllegalArgumentException("Team 생성 실패: 야더링 Id를 찾을 수 없습니다.");
+        });
+
+        String[] members = teamRequest.getUser().split(",");
+        // team 생성
+        Team team = Team.builder()
+                .team_name(teamRequest.getTeam_name())
+                .festival(festival)
+                .user(Arrays.asList(members))
+                .build();
+        teamRepository.save(team);
+        // 팀원 수에 맞게 round 생성
+        int section_num = festival.getSection_num();
+        List<Round> roundList = new ArrayList<>();
+        for(int i = 1; i < section_num+1; i++){
+            for(String member : members){
+                Round round = Round.builder()
+                        .section_id(Integer.toUnsignedLong(i))
+                        .tries(0)
+                        .success(false)
+                        .member_name(member)
+                        .team(team)
+                        .build();
+                roundList.add(round);
+                roundRepository.save(round);
+            }
+        }
+    }
+
+    @Transactional
+    public Team team(Long teamId){
+        Team team = teamRepository.findById(teamId).orElseThrow(()->{
+            return new IllegalArgumentException("해당 팀을 찾을 수 없습니다.");
+        });
+        return team;
+    }
+
+    @Transactional
+    public void scoreUpdate(ScoreInputFestivalRequest scoreInputFestivalRequest){
+        Team team = teamRepository.findById(scoreInputFestivalRequest.getTeamId()).orElseThrow(()->{
+            return new IllegalArgumentException("해당 팀을 찾을 수 없습니다.");
+        });
+        String member = team.getUser().get(scoreInputFestivalRequest.getIndexNum());
+        Round round = roundRepository.findByTeamIdAndSectionIdAndMemberName(
+                scoreInputFestivalRequest.getTeamId(),
+                scoreInputFestivalRequest.getSectionNum(),
+                member
+        ).orElseThrow(()->{
+            return new IllegalArgumentException("해당 점수표를 찾을 수 없습니다.");
+        });
+        round.setFestival_score(scoreInputFestivalRequest.getScore());
+        roundRepository.save(round);
+    }
 }

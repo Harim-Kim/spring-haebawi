@@ -29,29 +29,37 @@
             <form action="#" th:action="|/festival/${festivalResponse.id}|" method="#" th:method="delete">
                 <button type="submit" class="badge">삭제</button>
             </form>
-            <a data-confirm="Are you sure?" th:href="@{/festival/{id}/update(id=${festivalResponse.id})}" rel="nofollow">update</a>
-            <a data-confirm="Are you sure?" th:href="@{/festival/{id}/team(id=${festivalResponse.id})}" rel="nofollow">팀 등록</a>
+            <a th:href="@{/festival/{id}/update(id=${festivalResponse.id})}" rel="nofollow">update</a>
+            <a th:href="@{/festival/{id}/team(id=${festivalResponse.id})}" rel="nofollow">팀 등록</a>
         </div>
     </th:block>
-
+    <div>
+        <p>section 수 : </p>
+        <span th:text="${festivalResponse.section_num}"></span>
+    </div>
     <div>
         <p th:text="${festivalResponse.description}"></p>
     </div>
 
 
-<!--    <div class="card">-->
-<!--        <form th:method="post" th:action="|/board/${boardResponse.id}/reply|" th:object="${replyRequest}">-->
-<!--&lt;!&ndash;            <input type="hidden"  th:field="*{userId}"  th:value="${currentUser.getId()}">&ndash;&gt;-->
-<!--&lt;!&ndash;            <input type="hidden"  th:field="*{boardId}"  th:value="${boardResponse.getId()}">&ndash;&gt;-->
-<!--            <div class="card-body">-->
-<!--                <label th:for="content">내용 : </label>-->
-<!--                <textarea id="content" th:field="*{content}" class="form-control" rows="1"></textarea>-->
-<!--            </div>-->
-<!--            <div class="card-footer">-->
-<!--                <button type="submit">등록</button>-->
-<!--            </div>-->
-<!--        </form>-->
-<!--    </div>-->
+    <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name())}">
+        <div class="card">
+            <form th:method="post" th:action="|/festival/${festivalResponse.id}/team|" th:object="${teamRequest}">
+                <div class="card-body">
+                    <label th:for="team_name">팀 이름 : </label>
+                    <input type="text" th:field="*{team_name}" th:errorclass="error-input"/>
+                    <label th:for="team_name">팀원 이름(,로 구분) : </label>
+                    <textarea id="content" th:field="*{user}"  th:errorclass="error-input" class="form-control" rows="1"></textarea>
+
+                </div>
+                <div class="card-footer">
+                    <button type="submit">등록</button>
+                </div>
+            </form>
+        </div>
+    </th:block>
+
+
     <br>
 
     <div class="card">
@@ -60,8 +68,21 @@
             <th:block th:if="${festivalResponse.team}">
                 <th:block th:each="team : ${festivalResponse.team}">
                     <li id="comment--1" class="list-group-item d-flex justify-content-between">
-                        <div><p th:text="${team.team_name}"></p> </div>
+                        <div>
+                            <span th:text="${team.team_name}"></span>
+                            <br>
+                            <span>팀 점수:</span>
+                        </div>
+                        <div>
+                                <th:block th:each="user : ${team.getUser()}">
+                                    <span th:text="${user}"></span>
+                                </th:block>
+                            <br>
+                            <span th:text="${team.GetTeamScore()}"></span>
+                        </div>
+
                         <div class="d-flex">
+                            <a th:href="@{/festival/{id}/team/{teamId}(id=${festivalResponse.id}, teamId=${team.id})}" rel="nofollow"><span>상세 점수</span></a>
 <!--                            <div class="">작성자: <span th:text="${reply.user.nickname}"></span></div>-->
                             <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name())}">
                                 <form action="#" th:action="|/festival/${festivalResponse.id}/team/${team.id}|" method="#" th:method="delete">
