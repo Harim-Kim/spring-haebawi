@@ -11,6 +11,5 @@ public class ScoreInputFestivalRequest {
     private int score;
     private Long teamId;
     private Long festivalId;
-    private int sectionNum;
-    private int indexNum;
+    private String data;
 }

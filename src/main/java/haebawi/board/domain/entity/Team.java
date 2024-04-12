@@ -46,12 +46,12 @@ public class Team {
     private List<Round> round = new ArrayList<>();;
 
 
-    public List<Integer> GetScoreSection(Long sectionId){
-        List<Integer> scores = new ArrayList<>();
+    public List<Round> GetScoreSection(Long sectionNum){
+        List<Round> scores = new ArrayList<>();
 
         for(Round r : this.round){
-            if(r.getSection_id().equals(sectionId)){
-                scores.add(r.getFestival_score());
+            if(r.getSectionNum().equals(sectionNum)){
+                scores.add(r);
             }
         }
         Collections.reverse(scores);

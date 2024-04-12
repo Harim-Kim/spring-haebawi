@@ -1,5 +1,6 @@
 package haebawi.board.domain.dto;
 
+import haebawi.board.domain.entity.Competition;
 import haebawi.board.domain.entity.Festival;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,35 +9,34 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class FestivalRequest {
+public class CompetitionRequest {
     private Long id;
     private String name, description;
     private LocalDateTime createdAt, updatedAt, deletedAt, day;
     private int section_num;
 
     @Builder
-    public FestivalRequest(Long id, String name, LocalDateTime createdAt, LocalDateTime day, String description, int section_num){
+    public CompetitionRequest(Long id, String name, LocalDateTime day, String description){
         this.id = id;
         this.name = name;
         this.day = day;
         this.description = description;
-        this.createdAt = createdAt;
-        this.section_num = section_num;
     }
 
-    public Festival toEntity(){
-        return Festival.builder()
+    public Competition toEntity(){
+        return Competition.builder()
                 .id(id)
                 .name(name)
                 .day(day)
                 .description(description)
                 .created_at(LocalDateTime.now())
                 .updated_at(LocalDateTime.now())
-                .section_num(section_num)
+                .section_num(2)
                 .build();
     }
 }

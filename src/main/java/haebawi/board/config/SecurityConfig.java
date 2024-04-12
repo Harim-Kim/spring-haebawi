@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+//@EnableWebSecurity(debug = true)
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -66,7 +66,9 @@ public class SecurityConfig {
                         }))
                         .deleteCookies("JSESSIONID")
 
-                );
+                )
+                .csrf().disable()
+        ;
 
         return http.build();
     }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+</head>
+<body>
+<h1>야더링 대회</h1>
+<div class="container">
+    <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name())}">
+        <a href="/festival/create">대회 작성</a>
+    </th:block>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>대회명</th>
+                <th>대회 날짜</th>
+                <th>작성일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="festival : ${festivals}">
+
+                <td th:text="${festival.id}"></td>
+                <td><a th:href="@{/festival/{id}(id=${festival.id})}"><span th:text="${festival.name}"></span></a></td>
+                <td th:text="${festival.day}"></td>
+                <td th:text="${festival.created_at}"></td>
+            </tr>
+        </tbody>
+
+
+
+    </table>
+    <ul>
+        <th:block th:unless="${festivals.first}">
+            <li>
+                <a class="page-link" th:href="@{/festivals?page={number}(number=${festivals.number-1})}">이전</a>
+            </li>
+        </th:block>
+        <th:block th:unless="${festivals.last}">
+            <li>
+                <a class="page-link" th:href="@{/festivals?page={number}(number=${festivals.number-1})}">다음</a>
+            </li>
+        </th:block>
+    </ul>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+</body>
+</html>

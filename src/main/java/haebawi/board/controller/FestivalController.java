@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -76,7 +78,12 @@ public class FestivalController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("teamRequest", new TeamRequest());
 //        model.addAttribute("sectionRequest", new SectionRequest());
-
+        List<MemberScore> memberScores = festivalService.GetBestMemberScore(festival);
+        List<Team> bestTeam = festivalService.GetBestTeam(festival);
+        model.addAttribute("bestMember", memberScores);
+        model.addAttribute("bestTeam", bestTeam);
+        // 현재 최고점
+        // 현재 최고점수
         return "festival/one_festival";
     }
 
@@ -165,22 +172,16 @@ public class FestivalController {
     점수 입력
      */
 
-    @GetMapping("/{festivalId}/team/{teamId}/score")
-    public String scoreInput(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId, @RequestParam("section") int sectionNum, @RequestParam("index") int indexNum, Model model, Principal principal){
-        User user = userService.getLoginUserByLoginId(principal.getName());
-        model.addAttribute("festivalId", festivalId);
-        model.addAttribute("teamId", teamId);
-        model.addAttribute("currentUser", user);
-        model.addAttribute("scoreRequest", new ScoreInputFestivalRequest());
-        model.addAttribute("sectionNum", sectionNum);
-        model.addAttribute("indexNum", indexNum);
-        return "festival/score_input";
-    }
-
     @PostMapping("/{festivalId}/team/{teamId}/score")
-    public void scoreUpdate(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId, @Valid ScoreInputFestivalRequest  scoreInputFestivalRequest){
-        scoreInputFestivalRequest.setFestivalId(festivalId);
-        scoreInputFestivalRequest.setTeamId(teamId);
-        festivalService.scoreUpdate(scoreInputFestivalRequest);
+    public String scoreUpdate(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId, @RequestParam Map<String, String> data, RedirectAttributes redirectAttributes){
+
+        System.out.println(data); //{1-0=11, 1-1=22, 1-2=33, 2-0=66, 2-1=55, 2-2=44}
+        int result = festivalService.scoreUpdate(data, teamId, festivalId);
+        if (result == 0){
+            // 에러 작업
+        }
+        redirectAttributes.addAttribute("festivalId", festivalId);
+        redirectAttributes.addAttribute("teamId", teamId);
+        return "redirect:/festival/{festivalId}/team/{teamId}";
     }
 }

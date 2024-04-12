@@ -33,21 +33,22 @@ public class Round {
     @Column
     private int festival_score;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name="user_id")
-//    private User user;
 
     @Column
     private Long user_id;
 
     @Column
-    private String member_name;
+    private String memberName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="TEAM_ID")
     private Team team;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="GRADEGROUP_ID")
+    private GradeGroup gradeGroup;
+
     @Column
-    private Long section_id;
+    private Long sectionNum;
 
 }

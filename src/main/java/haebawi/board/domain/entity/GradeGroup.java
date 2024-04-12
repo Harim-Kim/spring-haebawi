@@ -1,6 +1,7 @@
 package haebawi.board.domain.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,11 +36,12 @@ public class GradeGroup {
     @JoinColumn(name="COMPETITION_ID")
     private Competition competition;
 
-    @OneToMany(mappedBy = "gradeGroup", fetch = FetchType.LAZY)
-    private List<User> users = new ArrayList<>();
+    @ElementCollection(fetch = FetchType.LAZY)
+    private List<String> member = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "gradeGroup", fetch = FetchType.LAZY)
-//    private List<Section> sections = new ArrayList<>();
-
+    @OneToMany(mappedBy = "gradeGroup", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
+    @JsonIgnoreProperties({"gradeGroup"})
+    @OrderBy("id desc")
+    private List<Round> round = new ArrayList<>();;
 
 }

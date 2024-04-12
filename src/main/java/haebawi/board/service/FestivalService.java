@@ -1,26 +1,21 @@
 package haebawi.board.service;
 
 import haebawi.board.domain.UserRole;
-import haebawi.board.domain.dto.BoardRequest;
-import haebawi.board.domain.dto.FestivalRequest;
-import haebawi.board.domain.dto.ScoreInputFestivalRequest;
-import haebawi.board.domain.dto.TeamRequest;
+import haebawi.board.domain.dto.*;
 import haebawi.board.domain.entity.*;
 import haebawi.board.repository.FestivalRepository;
 import haebawi.board.repository.RoundRepository;
 import haebawi.board.repository.TeamRepository;
 import haebawi.board.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -103,10 +98,10 @@ public class FestivalService {
         for(int i = 1; i < section_num+1; i++){
             for(String member : members){
                 Round round = Round.builder()
-                        .section_id(Integer.toUnsignedLong(i))
+                        .sectionNum(Integer.toUnsignedLong(i))
                         .tries(0)
                         .success(false)
-                        .member_name(member)
+                        .memberName(member)
                         .team(team)
                         .build();
                 roundList.add(round);
@@ -124,19 +119,69 @@ public class FestivalService {
     }
 
     @Transactional
-    public void scoreUpdate(ScoreInputFestivalRequest scoreInputFestivalRequest){
-        Team team = teamRepository.findById(scoreInputFestivalRequest.getTeamId()).orElseThrow(()->{
+    public int scoreUpdate(Map<String, String> data, Long teamId, Long festivalId){
+        Team team = teamRepository.findById(teamId).orElseThrow(()->{
             return new IllegalArgumentException("해당 팀을 찾을 수 없습니다.");
         });
-        String member = team.getUser().get(scoreInputFestivalRequest.getIndexNum());
-        Round round = roundRepository.findByTeamIdAndSectionIdAndMemberName(
-                scoreInputFestivalRequest.getTeamId(),
-                scoreInputFestivalRequest.getSectionNum(),
-                member
-        ).orElseThrow(()->{
-            return new IllegalArgumentException("해당 점수표를 찾을 수 없습니다.");
-        });
-        round.setFestival_score(scoreInputFestivalRequest.getScore());
-        roundRepository.save(round);
+        // 한번에 받아서 처리함
+        for (Map.Entry<String, String> entrySet : data.entrySet()){
+            String[] section_index = entrySet.getKey().split("-");
+            String memberIndex = section_index[1];
+            String sectionNum = section_index[0];
+            String member;
+            Round round;
+            int score;
+            try{
+                score = Integer.parseInt(entrySet.getValue());
+                member = team.getUser().get(Integer.parseInt(memberIndex));
+                round = roundRepository.findByTeamIdAndSectionNumAndMemberName(
+                        teamId,
+                        Integer.parseInt(sectionNum),
+                        member
+                ).orElseThrow(()->{
+                    return new IllegalArgumentException("해당 점수표를 찾을 수 없습니다.");
+                });
+            }catch (Exception e){
+                e.printStackTrace();
+                return 0;
+            }
+            round.setFestival_score(score);
+            roundRepository.save(round);
+        }
+        return 1;
     }
+
+    public List<Team> GetBestTeam(Festival festival){
+        List<Team> bestTeamList = festival.getTeam();
+        bestTeamList.sort(Comparator.comparing(Team::GetTeamScore).reversed());
+        return bestTeamList;
+    }
+
+    public List<MemberScore> GetBestMemberScore(Festival festival){
+        List<Round> rounds = new ArrayList<>();
+        List<MemberScore> memberScores = new ArrayList<>();
+        Map<String, Integer> memberScore = new HashMap<>();
+        for(Team team: festival.getTeam()){
+            rounds.addAll(team.getRound());
+        }
+        for(Round round: rounds){
+            if(memberScore.containsKey(round.getMemberName())){
+                memberScore.replace(round.getMemberName(), memberScore.get(round.getMemberName())+ round.getFestival_score());
+            }else{
+                memberScore.put(round.getMemberName(), round.getFestival_score());
+            }
+        }
+        Iterator<String> keys = memberScore.keySet().iterator();
+        while(keys.hasNext()){
+            String name = keys.next();
+            MemberScore temp = new MemberScore(name, memberScore.get(name));
+            memberScores.add(temp);
+        }
+        memberScores.sort(Comparator.comparing(MemberScore::getScore).reversed());
+
+        return memberScores;
+
+    }
+
+
 }
