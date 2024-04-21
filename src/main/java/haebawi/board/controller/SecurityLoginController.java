@@ -38,7 +38,7 @@ public class SecurityLoginController {
             }
         }
 
-        return "home";
+        return "redirect:/";
     }
 
     @GetMapping("/join")
