@@ -5,9 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-
-</body>
-    <form th:method="post" th:action="|/competition/create|" th:object="${festivalRequest}">
+    <form th:method="post" th:action="|/competition/create|" th:object="${competitionRequest}">
         <div>
             <label th:for="title">대회명 : </label>
             <input type="text" th:field="*{name}" th:errorclass="error-input"/>
@@ -19,9 +17,19 @@
             <div class="error-class" th:errors="*{day}"></div>
         </div>
         <div>
-            <label th:for="day">section 수 : </label>
-            <input type="number" th:field="*{section_num}" th:errorclass="error-input" min="1" />
+            <label th:for="day">예선 문제 수 : </label>
+            <input type="number" th:field="*{section_num}" th:errorclass="error-input" />
             <div class="error-class" th:errors="*{section_num}"></div>
+        </div>
+        <div>
+            <label th:for="day">결승 문제 수 : </label>
+            <input type="number" th:field="*{final_round_num}" th:errorclass="error-input"/>
+            <div class="error-class" th:errors="*{final_round_num}"></div>
+        </div>
+        <div>
+            <label th:for="description">결승 진출자 수 : </label>
+            <input type="text" th:field="*{final_num}" th:errorclass="error-input"/>
+            <div class="error-class" th:errors="*{final_num}"></div>
         </div>
         <div>
             <label th:for="description">설명 : </label>
@@ -31,4 +39,7 @@
         <br/>
         <button type="submit">생성</button>
     </form>
+    <a href="/competition">뒤로가기</a>
+</body>
+
 </html>

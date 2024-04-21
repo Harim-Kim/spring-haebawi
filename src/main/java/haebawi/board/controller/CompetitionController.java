@@ -2,13 +2,12 @@ package haebawi.board.controller;
 
 
 import haebawi.board.domain.UserRole;
-import haebawi.board.domain.dto.FestivalRequest;
-import haebawi.board.domain.dto.MemberScore;
-import haebawi.board.domain.dto.TeamRequest;
-import haebawi.board.domain.entity.Festival;
+import haebawi.board.domain.dto.*;
+import haebawi.board.domain.entity.Competition;
+import haebawi.board.domain.entity.GradeGroup;
 import haebawi.board.domain.entity.Team;
 import haebawi.board.domain.entity.User;
-import haebawi.board.service.FestivalService;
+import haebawi.board.service.CompetitionService;
 import haebawi.board.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +31,14 @@ import java.util.Map;
 @RequestMapping("/competition")
 public class CompetitionController {
     private final UserService userService;
-    private final FestivalService festivalService;
+    private final CompetitionService competitionService;
 
     @GetMapping({"","/"})
     public String indexList(Model model, @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable, Principal principal){
-        model.addAttribute("festivals", festivalService.festivalList(pageable));
+        model.addAttribute("competitions", competitionService.CompetitionList(pageable));
         User user = userService.getLoginUserByLoginId(principal.getName());
         model.addAttribute("currentUser", user);
-        return "festival/index";
+        return "competition/index";
     }
 
     /*
@@ -47,146 +46,162 @@ public class CompetitionController {
      */
     @GetMapping("/create")
     public String create(Model model){
-        model.addAttribute("festivalRequest", new FestivalRequest());
-        return "festival/create";
+        model.addAttribute("competitionRequest", new CompetitionRequest());
+        return "competition/create";
     }
     @PostMapping("/create")
-    public String create(@Valid FestivalRequest festivalRequest, BindingResult bindingResult, Principal principal, RedirectAttributes redirectAttributes){
+    public String create(@Valid CompetitionRequest competitionRequest, BindingResult bindingResult, Principal principal, RedirectAttributes redirectAttributes){
 
-        if(festivalRequest.getName() == null || festivalRequest.getName().isEmpty()){
-            bindingResult.addError(new FieldError("festivalRequest","name", "이름을 입력해주세요"));
+        if(competitionRequest.getName() == null || competitionRequest.getName().isEmpty()){
+            bindingResult.addError(new FieldError("competitionRequest","name", "이름을 입력해주세요"));
         }
         if (bindingResult.hasErrors()){
-            return "festival/create";
+            return "competition/create";
         }
         User user = userService.getLoginUserByLoginId(principal.getName());
-        Long festivalId = festivalService.save(user, festivalRequest);
-        if (festivalId == null){
-            bindingResult.addError(new ObjectError("festivalRequest", "볼파 생성 중 에러가 발생하였습니다. 잠시 후 재 작성해주세요."));
+        Long competitionId = competitionService.save(user, competitionRequest);
+        if (competitionId == null){
+            bindingResult.addError(new ObjectError("competitionRequest", "대회 생성 중 에러가 발생하였습니다. 잠시 후 재 작성해주세요."));
         }
 
         if (bindingResult.hasErrors()){
-            return "festival/create";
+            return "competition/create";
         }
-        redirectAttributes.addAttribute("festivalId", festivalId);
-        return "redirect:/festival/{festivalId}";
+        redirectAttributes.addAttribute("competitionId", competitionId);
+        return "redirect:/competition/{competitionId}";
     }
     /*
     Read
      */
-    @GetMapping("/{festivalId}")
-    public String festival(@PathVariable("festivalId") Long festivalId, Model model, Principal principal){
-        Festival festival = festivalService.getFestivalById(festivalId);
-        model.addAttribute("festivalResponse", festival); // 이미 team을 가지고 있음.
+    @GetMapping("/{competitionId}")
+    public String competition(@PathVariable("competitionId") Long competitionId, Model model, Principal principal){
+        Competition competition = competitionService.getCompetitionById(competitionId);
+        model.addAttribute("competitionResponse", competition); // 이미 team을 가지고 있음.
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
         model.addAttribute("currentUser", currentUser);
-        model.addAttribute("teamRequest", new TeamRequest());
-//        model.addAttribute("sectionRequest", new SectionRequest());
-        List<MemberScore> memberScores = festivalService.GetBestMemberScore(festival);
-        List<Team> bestTeam = festivalService.GetBestTeam(festival);
-        model.addAttribute("bestMember", memberScores);
-        model.addAttribute("bestTeam", bestTeam);
+        model.addAttribute("gradegroupRequest", new GradegroupRequest());
+        // 예선 순위, 결승 순위
+
+//        Map<GradeGroup, List<CompetitionMemberScore>> finalMember = competitionService.GetBestMemberGrade(competition); // grade당 순위
+//        List<Team> bestTeam = competitionService.GetBestTeam(competition); // 결승 진출자
+//        model.addAttribute("finalMember", finalMember);
+//        model.addAttribute("bestTeam", bestTeam);
         // 현재 최고점
         // 현재 최고점수
-        return "festival/one_festival";
+        return "competition/one_competition";
     }
 
     /*
     Update
      */
-    @GetMapping("/{festivalId}/update")
-    public String updatePage(@PathVariable("festivalId") Long festivalId,@Valid FestivalRequest festivalRequest, Model model, Principal principal, BindingResult bindingResult){
-        Festival festival = festivalService.getFestivalById(festivalId);
+    @GetMapping("/{competitionId}/update")
+    public String updatePage(@PathVariable("competitionId") Long competitionId, @Valid CompetitionRequest competitionRequest, Model model, Principal principal, BindingResult bindingResult){
+        Competition competition = competitionService.getCompetitionById(competitionId);
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
-        model.addAttribute("festivalRequest", festivalRequest);
-        model.addAttribute("festivalResponse", festival);
+        model.addAttribute("competitionRequest", competitionRequest);
+        model.addAttribute("competitionResponse", competition);
         if(currentUser.getRole() != UserRole.ADMIN){
             bindingResult.addError(new ObjectError("festivalResponse", "admin이 아닙니다."));
-            return "redirect:festival";
+            return "redirect:competition";
         }
-        return "festival/update";
+        return "competition/update";
     }
-    @PostMapping("/{festivalId}")
-    public String update(@PathVariable("festivalId") Long festivalId, @Valid FestivalRequest festivalRequest, Model model, Principal principal, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-        Festival festival = festivalService.getFestivalById(festivalId);
+    @PostMapping("/{competitionId}")
+    public String update(@PathVariable("competitionId") Long competitionId, @Valid CompetitionRequest competitionRequest, Model model, Principal principal, BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        Competition competition = competitionService.getCompetitionById(competitionId);
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
         if(currentUser.getRole() != UserRole.ADMIN){
             bindingResult.addError(new ObjectError("festivalResponse", "admin이 아닙니다."));
-            return "redirect:festival";
+            return "redirect:competition";
         }
-        if(festivalRequest.getName() == null || festivalRequest.getName().isEmpty()){
-            bindingResult.addError(new FieldError("festivalRequest","name", "이름을 입력해주세요"));
+        if(competitionRequest.getName() == null || competitionRequest.getName().isEmpty()){
+            bindingResult.addError(new FieldError("competitionRequest","name", "이름을 입력해주세요"));
         }
         if(bindingResult.hasErrors()){
-            return "festival/update";
+            return "competition/update";
         }
-        festivalService.update(festivalId, festivalRequest);
-        redirectAttributes.addAttribute("festivalId", festivalId);
-        return "redirect:/festival/{festivalId}";
+        competitionService.update(competitionId, competitionRequest);
+        redirectAttributes.addAttribute("competitionId", competitionId);
+        return "redirect:/competition/{competitionId}";
     }
     /*
     Delete
      */
-    @DeleteMapping("/{festivalId}")
-    public String delete(@PathVariable("festivalId") Long festivalId, Model model, Principal principal, RedirectAttributes redirectAttributes){
-        Festival festival = festivalService.getFestivalById(festivalId);
+    @DeleteMapping("/{competitionId}")
+    public String delete(@PathVariable("competitionId") Long competitionId, Model model, Principal principal, RedirectAttributes redirectAttributes){
+        Competition competition = competitionService.getCompetitionById(competitionId);
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
         if(currentUser.getRole() != UserRole.ADMIN){
-            model.addAttribute("error","본인이 작성한 게시물이 아닙니다.");
-            redirectAttributes.addAttribute("festivalId", festivalId);
-            return "redirect:/festival/{festivalId}";
+            model.addAttribute("error","Admin이 아닙니다.");
+            redirectAttributes.addAttribute("competitionId", competitionId);
+            return "redirect:/competition/{competitionId}";
         }
-        festivalService.delete(festivalId);
-        return "redirect:/festival/";
+        competitionService.delete(competitionId);
+        return "redirect:/competition/";
     }
 
     /*
-    Team 생성
+    grade group 생성
      */
-    @PostMapping("/{festivalId}/team")
-    public String teamSave(@PathVariable("festivalId") Long festivalId,@Valid TeamRequest teamRequest, Principal principal, RedirectAttributes redirectAttributes){
+    @PostMapping("/{competitionId}/gradegroup")
+    public String teamSave(@PathVariable("competitionId") Long competitionId,@Valid GradegroupRequest gradegroupRequest, Principal principal, RedirectAttributes redirectAttributes){
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
         if(currentUser.getRole() != UserRole.ADMIN){
-            redirectAttributes.addAttribute("festivalId", festivalId);
-            return "redirect:/festival/{festivalId}";
+            redirectAttributes.addAttribute("competitionId", competitionId);
+            return "redirect:/competition/{competitionId}";
         }
-        teamRequest.setFestivalId(festivalId);
-        festivalService.teamSave(teamRequest);
-        redirectAttributes.addAttribute("festivalId", festivalId);
-        return "redirect:/festival/{festivalId}";
+        gradegroupRequest.setCompetitionId(competitionId);
+        competitionService.gradegroupSave(gradegroupRequest);
+        redirectAttributes.addAttribute("competitionId", competitionId);
+        return "redirect:/competition/{competitionId}";
+
+    }
+    /*
+    final 생성
+     */
+    @PostMapping("/{competitionId}/final")
+    public String createFinal(@PathVariable("competitionId") Long competitionId, Principal principal, RedirectAttributes redirectAttributes){
+        User currentUser = userService.getLoginUserByLoginId(principal.getName());
+        if(currentUser.getRole() != UserRole.ADMIN){
+            redirectAttributes.addAttribute("competitionId", competitionId);
+            return "redirect:/competition/{competitionId}";
+        }
+        competitionService.createFinal(competitionId);
+        redirectAttributes.addAttribute("competitionId", competitionId);
+        return "redirect:/competition/{competitionId}";
 
     }
 
     /*
-    팀 상세 보기
+    난이도 상세 보기
      */
-    @GetMapping("/{festivalId}/team/{teamId}")
-    public String teamView(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId,Model model, Principal principal){
+    @GetMapping("/{competitionId}/gradegroup/{gradegroupId}")
+    public String gradeGroupView(@PathVariable("competitionId") Long competitionId, @PathVariable("gradegroupId") Long gradegroupId,Model model, Principal principal){
         User user = userService.getLoginUserByLoginId(principal.getName());
         model.addAttribute("currentUser", user);
-        Team team = festivalService.team(teamId);
-        model.addAttribute("teamResponse", team);
-        model.addAttribute("festivalId", festivalId);
-        Festival festival = festivalService.getFestivalById(festivalId);
-        model.addAttribute("sectionNum", festival.getSection_num());
-        return "festival/one_team";
+        GradeGroup gradeGroup = competitionService.gradeGroup(gradegroupId);
+        model.addAttribute("gradeGroupResponse", gradeGroup);
+        model.addAttribute("competitionId", competitionId);
+        Competition competition = competitionService.getCompetitionById(competitionId);
+        model.addAttribute("competition", competition);
+        return "one_gradegroup";
     }
 
     /*
     점수 입력
      */
 
-    @PostMapping("/{festivalId}/team/{teamId}/score")
-    public String scoreUpdate(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId, @RequestParam Map<String, String> data, RedirectAttributes redirectAttributes){
+    @PostMapping("/{competitionId}/gradegroup/{gradegroupId}/score")
+    public String scoreUpdate(@PathVariable("competitionId") Long competitionId, @PathVariable("gradegroupId") Long gradegroupId, @RequestParam Map<String, String> data, RedirectAttributes redirectAttributes){
 
         System.out.println(data); //{1-0=11, 1-1=22, 1-2=33, 2-0=66, 2-1=55, 2-2=44}
-        int result = festivalService.scoreUpdate(data, teamId, festivalId);
+        int result = competitionService.scoreUpdate(data, gradegroupId, competitionId);
         if (result == 0){
             // 에러 작업
         }
-        redirectAttributes.addAttribute("festivalId", festivalId);
-        redirectAttributes.addAttribute("teamId", teamId);
-        return "redirect:/festival/{festivalId}/team/{teamId}";
+        redirectAttributes.addAttribute("competitionId", competitionId);
+        redirectAttributes.addAttribute("gradegroupId", gradegroupId);
+        return "redirect:/competition/{competitionId}/gradegroup/{gradegroupId}";
     }
 
 }

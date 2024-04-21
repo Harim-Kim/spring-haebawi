@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface RoundRepository extends JpaRepository<Round, Long> {
     Optional<Round> findByTeamIdAndSectionNumAndMemberName(Long teamId, int sectionNum, String memberName);
+    Optional<Round> findByGradeGroupIdAndSectionNumAndMemberName(Long gradegroupId, int sectionNum, String memberName);
 }

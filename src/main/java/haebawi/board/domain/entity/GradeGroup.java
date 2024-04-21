@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /*
@@ -21,7 +22,6 @@ team이랑 같지만 논리적 구분
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Where( clause = "deleted_at IS NULL")
 public class GradeGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +42,18 @@ public class GradeGroup {
     @OneToMany(mappedBy = "gradeGroup", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
     @JsonIgnoreProperties({"gradeGroup"})
     @OrderBy("id desc")
-    private List<Round> round = new ArrayList<>();;
+    private List<Round> round = new ArrayList<>();
+
+    public List<Round> GetQualifyScore(Long sectionNum){
+        List<Round> scores = new ArrayList<>();
+
+        for(Round r: this.round){
+            if(r.getSectionNum().equals(sectionNum)){
+                scores.add(r);
+            }
+        }
+        Collections.reverse(scores);
+        return scores;
+    }
 
 }

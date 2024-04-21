@@ -1,11 +1,13 @@
-<html lang="ko">
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="|${pageName}|"></title>
-</head>
-<body>
-<div>
+
+
+
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
+
+<div layout:fragment="content">
     <h1><a th:href="|/${loginType}|">[[${pageName}]]</a></h1> <hr/>
     <div th:if="${nickname == null}">
         <h3>로그인 되어있지 않습니다!</h3>
@@ -19,5 +21,6 @@
         <button th:onclick="|location.href='@{/{loginType}/logout (loginType=${loginType})}'|">로그아웃</button>
     </div>
 </div>
-</body>
+
+
 </html>

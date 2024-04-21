@@ -1,24 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-<form th:method="post" th:action="|/board/${boardResponse.id}|" th:object="${boardRequest}">
-    <div>
-        <label th:for="title">제목 : </label>
-        <input type="text" th:field="*{title}" th:errorclass="error-input" th:value="${boardResponse.title}"/>
-        <div class="error-class" th:errors="*{title}"></div>
-    </div>
-    <br/>
-    <div>
-        <label th:for="content">내용 : </label>
-        <input type="text" th:field="*{content}" th:errorclass="error-input"/>
-        <div class="error-class" th:errors="*{content}"></div>
-    </div>
-    <button type="submit">작성</button>
-</form>
+<!DOCTYPE html>
+<html xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
+
+<div layout:fragment="content">
+    <form th:method="post" th:action="|/board/${boardResponse.id}|" th:object="${boardRequest}">
+        <div>
+            <label th:for="title">제목 : </label>
+            <input type="text" th:field="*{title}" th:errorclass="error-input" th:value="${boardResponse.title}"/>
+            <div class="error-class" th:errors="*{title}"></div>
+        </div>
+        <br/>
+        <div>
+            <label th:for="content">내용 : </label>
+            <input type="text" th:field="*{content}" th:errorclass="error-input"/>
+            <div class="error-class" th:errors="*{content}"></div>
+        </div>
+        <button type="submit">작성</button>
+    </form>
+</div>
+
+
 </html>

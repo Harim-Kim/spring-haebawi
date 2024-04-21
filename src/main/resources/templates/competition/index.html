@@ -10,10 +10,10 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 </head>
 <body>
-<h1>야더링 대회</h1>
+<h1>최강 야바위꾼 선발 대회</h1>
 <div class="container">
     <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name())}">
-        <a href="/festival/create">대회 작성</a>
+        <a href="/competition/create">대회 생성</a>
     </th:block>
     <table>
         <thead>
@@ -25,12 +25,12 @@
             </tr>
         </thead>
         <tbody>
-            <tr th:each="festival : ${festivals}">
+            <tr th:each="competition : ${competitions}">
 
-                <td th:text="${festival.id}"></td>
-                <td><a th:href="@{/festival/{id}(id=${festival.id})}"><span th:text="${festival.name}"></span></a></td>
-                <td th:text="${festival.day}"></td>
-                <td th:text="${festival.created_at}"></td>
+                <td th:text="${competition.id}"></td>
+                <td><a th:href="@{/competition/{id}(id=${competition.id})}"><span th:text="${competition.name}"></span></a></td>
+                <td th:text="${competition.day}"></td>
+                <td th:text="${competition.created_at}"></td>
             </tr>
         </tbody>
 
@@ -38,14 +38,14 @@
 
     </table>
     <ul>
-        <th:block th:unless="${festivals.first}">
+        <th:block th:unless="${competitions.first}">
             <li>
-                <a class="page-link" th:href="@{/festivals?page={number}(number=${festivals.number-1})}">이전</a>
+                <a class="page-link" th:href="@{/competition?page={number}(number=${competitions.number-1})}">이전</a>
             </li>
         </th:block>
-        <th:block th:unless="${festivals.last}">
+        <th:block th:unless="${competitions.last}">
             <li>
-                <a class="page-link" th:href="@{/festivals?page={number}(number=${festivals.number-1})}">다음</a>
+                <a class="page-link" th:href="@{/competition?page={number}(number=${competitions.number-1})}">다음</a>
             </li>
         </th:block>
     </ul>

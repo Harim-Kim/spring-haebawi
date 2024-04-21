@@ -1,34 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout2}">
+<!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
-</body>
+<div layout:fragment="content">
     <form th:method="post" th:action="|/festival/create|" th:object="${festivalRequest}">
         <div>
             <label th:for="title">대회명 : </label>
-            <input type="text" th:field="*{name}" th:errorclass="error-input"/>
-            <div class="error-class" th:errors="*{name}"></div>
+            <input type="text" th:field="*{name}" th:errorclass="error-input"  class="form-control" />
+            <div class="error-class alert alert-danger" th:errors="*{name}" role="alert"></div>
         </div>
         <div>
             <label th:for="day">대회 일시 : </label>
-            <input type="datetime-local" th:field="*{day}" th:errorclass="error-input" min="2024-01-01" />
-            <div class="error-class" th:errors="*{day}"></div>
+            <input type="datetime-local" th:field="*{day}" th:errorclass="error-input" min="2024-01-01"  class="form-control" />
+            <div class="error-class alert alert-danger" th:errors="*{day}"   role="alert"></div>
         </div>
         <div>
             <label th:for="day">section 수 : </label>
-            <input type="number" th:field="*{section_num}" th:errorclass="error-input" min="1" />
-            <div class="error-class" th:errors="*{section_num}"></div>
+            <input type="number" th:field="*{section_num}" th:errorclass="error-input" min="1"  class="form-control" />
+            <div class="error-class alert alert-danger" th:errors="*{section_num}"  role="alert"></div>
         </div>
         <div>
             <label th:for="description">설명 : </label>
-            <input type="text" th:field="*{description}" th:errorclass="error-input"/>
-            <div class="error-class" th:errors="*{description}"></div>
+            <input type="text" th:field="*{description}" th:errorclass="error-input"  class="form-control" />
+            <div class="error-class alert alert-danger" th:errors="*{description}"  role="alert"></div>
         </div>
         <br/>
         <button type="submit">생성</button>
     </form>
+</div>
+
+
 </html>

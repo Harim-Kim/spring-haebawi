@@ -140,7 +140,10 @@ public class BoardController {
     }
 
     @PostMapping("/{boardId}/reply")
-    public String replySave(@PathVariable Long boardId, @Valid ReplyRequest replyRequest, Principal principal, RedirectAttributes redirectAttributes){
+    public String replySave(@PathVariable Long boardId, @Valid ReplyRequest replyRequest, Principal principal, RedirectAttributes redirectAttributes, BindingResult bindingResult){
+        if(replyRequest.getContent() == null || replyRequest.getContent().isEmpty() ){
+            bindingResult.addError(new FieldError("replyRequest","content", "내용을 입력해주세요"));
+        }
         replyRequest.setBoardId(boardId);
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
         replyRequest.setUserId(currentUser.getId());

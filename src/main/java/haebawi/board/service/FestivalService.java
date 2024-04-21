@@ -94,7 +94,6 @@ public class FestivalService {
         teamRepository.save(team);
         // 팀원 수에 맞게 round 생성
         int section_num = festival.getSection_num();
-        List<Round> roundList = new ArrayList<>();
         for(int i = 1; i < section_num+1; i++){
             for(String member : members){
                 Round round = Round.builder()
@@ -104,7 +103,6 @@ public class FestivalService {
                         .memberName(member)
                         .team(team)
                         .build();
-                roundList.add(round);
                 roundRepository.save(round);
             }
         }

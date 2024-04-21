@@ -3,6 +3,7 @@ package haebawi.board.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Where;
 
 /*
@@ -50,5 +51,9 @@ public class Round {
 
     @Column
     private Long sectionNum;
+
+    @Column
+    @Builder.Default()
+    private boolean isFinal = false;
 
 }

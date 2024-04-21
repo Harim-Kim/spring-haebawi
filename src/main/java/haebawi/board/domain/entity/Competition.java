@@ -3,10 +3,7 @@ package haebawi.board.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Where;
 
 import java.time.LocalDateTime;
@@ -21,6 +18,7 @@ Competition - section(2개로 구성)
  */
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,7 +44,12 @@ public class Competition {
     private LocalDateTime deleted_at;
 
     @Column
-    private int section_num;
+    private int section_num;//예선 문제 수
+
+    @Column
+    private int final_round_num; // 결승 문제 수
+    @Column
+    private int final_num; // 결승 진출자
 
     @Column(nullable = false)
     private LocalDateTime day;
@@ -54,4 +57,6 @@ public class Competition {
     @OneToMany(mappedBy = "competition", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
     @JsonIgnoreProperties({"competition"})
     private List<GradeGroup> gradeGroup = new ArrayList<>();;
+
+   
 }

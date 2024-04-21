@@ -52,6 +52,9 @@ public class FestivalController {
         if(festivalRequest.getName() == null || festivalRequest.getName().isEmpty()){
             bindingResult.addError(new FieldError("festivalRequest","name", "이름을 입력해주세요"));
         }
+        if(festivalRequest.getDay() == null ){
+            bindingResult.addError(new FieldError("festivalRequest","day", "날짜를 입력해주세요"));
+        }
         if (bindingResult.hasErrors()){
             return "festival/create";
         }
