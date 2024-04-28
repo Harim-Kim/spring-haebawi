@@ -37,12 +37,12 @@ public class GradeGroup {
     private Competition competition;
 
     @ElementCollection(fetch = FetchType.LAZY)
-    private List<String> member = new ArrayList<>();
+    private List<String> member;
 
     @OneToMany(mappedBy = "gradeGroup", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
     @JsonIgnoreProperties({"gradeGroup"})
     @OrderBy("id desc")
-    private List<Round> round = new ArrayList<>();
+    private List<Round> round;
 
     public List<Round> GetQualifyScore(Long sectionNum){
         List<Round> scores = new ArrayList<>();

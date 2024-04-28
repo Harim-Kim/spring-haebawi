@@ -43,7 +43,7 @@ public class Team {
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
     @JsonIgnoreProperties({"team"})
     @OrderBy("id desc")
-    private List<Round> round = new ArrayList<>();;
+    private List<Round> round;
 
 
     public List<Round> GetScoreSection(Long sectionNum){

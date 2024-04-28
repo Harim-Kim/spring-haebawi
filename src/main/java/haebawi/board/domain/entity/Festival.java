@@ -49,6 +49,6 @@ public class Festival {
     // team one to many 느낌
     @OneToMany(mappedBy = "festival", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
     @JsonIgnoreProperties({"festival"})
-    private List<Team> team = new ArrayList<>();;
+    private List<Team> team;
 
 }

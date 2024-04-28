@@ -56,7 +56,7 @@ public class Competition {
 
     @OneToMany(mappedBy = "competition", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
     @JsonIgnoreProperties({"competition"})
-    private List<GradeGroup> gradeGroup = new ArrayList<>();;
+    private List<GradeGroup> gradeGroup;
 
    
 }

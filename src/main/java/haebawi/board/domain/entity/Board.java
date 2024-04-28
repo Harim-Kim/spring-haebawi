@@ -25,8 +25,8 @@ public class Board {
 
     @Column(length=500, nullable = false)
     private String title;
-
-    @Column(length = 500, nullable = false)
+    @Lob
+    @Column(length=50000, nullable = false)
     private String content;
 
     private String author;
@@ -52,7 +52,7 @@ public class Board {
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER, cascade = CascadeType.ALL) //mappedBy연관관계의 주인이 아니다(FK키가아니에요).
     @JsonIgnoreProperties({"board"})
     @OrderBy("id desc")
-    private List<Reply> reply = new ArrayList<>();;
+    private List<Reply> reply;
 
 
 }

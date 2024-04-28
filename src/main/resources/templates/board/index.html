@@ -39,18 +39,18 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <ul>
-                                <th:block th:unless="${boards.first}">
-                                    <li>
-                                        <a class="page-link" th:href="@{/board?page={number}(number=${boards.number-1})}">이전</a>
-                                    </li>
-                                </th:block>
-                                <th:block th:unless="${boards.last}">
-                                    <li>
-                                        <a class="page-link" th:href="@{/board?page={number}(number=${boards.number+1})}">다음</a>
-                                    </li>
-                                </th:block>
-                            </ul>
+<!--                            <ul>-->
+<!--                                <th:block th:unless="${boards.first}">-->
+<!--                                    <li>-->
+<!--                                        <a class="page-link" th:href="@{/board?page={number}(number=${boards.number-1})}">이전</a>-->
+<!--                                    </li>-->
+<!--                                </th:block>-->
+<!--                                <th:block th:unless="${boards.last}">-->
+<!--                                    <li>-->
+<!--                                        <a class="page-link" th:href="@{/board?page={number}(number=${boards.number+1})}">다음</a>-->
+<!--                                    </li>-->
+<!--                                </th:block>-->
+<!--                            </ul>-->
                         </div>
                     </div>
 

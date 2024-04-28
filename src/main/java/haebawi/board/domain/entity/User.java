@@ -38,7 +38,7 @@ public class User {
     private String nickname;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Board> boards = new ArrayList<>();
+    private List<Board> boards;
 
 //    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 //    private List<Round> rounds = new ArrayList<>();

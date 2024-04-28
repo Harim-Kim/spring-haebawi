@@ -35,10 +35,10 @@ public class BoardController {
     read
      */
     @GetMapping({"","/"})
-    public String indexList(Model model, @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC)Pageable pageable, Principal principal){
+    public String indexList(Model model,Principal principal){ // @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC)Pageable pageable,
         User user = userService.getLoginUserByLoginId(principal.getName());
         model.addAttribute("currentUser", user);
-        model.addAttribute("boards", boardService.boardList(pageable));
+        model.addAttribute("boards", boardService.findAll());
         return "board/index";
     }
     @GetMapping("/{boardId}")
