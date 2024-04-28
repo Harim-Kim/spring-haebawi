@@ -2,10 +2,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http//www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default_layout}">
+      layout:decorate="~{layouts/layout2}">
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
 <div layout:fragment="content">
+    <main id="main" class="main">
     <form th:method="post" th:action="|/board/${boardResponse.id}|" th:object="${boardRequest}">
         <div>
             <label th:for="title">제목 : </label>
@@ -20,6 +21,7 @@
         </div>
         <button type="submit">작성</button>
     </form>
+    </main>
 </div>
 
 

@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html xmlns:th="http//www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default_layout}">
+      layout:decorate="~{layouts/layout2}">
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
-
 <div layout:fragment="content">
+<main id="main" class="main">
+
+    <section class="section">
+        <div class="row">
+
+            <div class="col-lg-6">
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">TinyMCE Editor</h5>
+
+                        <!-- TinyMCE Editor -->
+                        <textarea class="tinymce-editor">
+                        <p>Hello World!</p>
+                        <p>This is TinyMCE <strong>full</strong> editor</p>
+                        </textarea><!-- End TinyMCE Editor -->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
     <form th:method="post" th:action="|/board/create|" th:object="${boardRequest}">
         <div>
             <label th:for="title">제목 : </label>
@@ -33,7 +55,8 @@
         <br/>
         <button type="submit">작성</button>
     </form>
+
+
+</main>
 </div>
-
-
 </html>

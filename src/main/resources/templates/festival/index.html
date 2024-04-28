@@ -5,43 +5,60 @@
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
 <div layout:fragment="content">
-    <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name())}">
-        <a href="/festival/create">대회 작성</a>
-    </th:block>
-    <table>
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>대회명</th>
-            <th>대회 날짜</th>
-            <th>작성일</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="festival : ${festivals}">
+    <main id="main" class="main">
 
-            <td th:text="${festival.id}"></td>
-            <td><a th:href="@{/festival/{id}(id=${festival.id})}"><span th:text="${festival.name}"></span></a></td>
-            <td th:text="${festival.day}"></td>
-            <td th:text="${festival.created_at}"></td>
-        </tr>
-        </tbody>
+        <div class="pagetitle">
+            <h1>게시판</h1>
+        </div><!-- End Page Title -->
 
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
 
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">야더링 파티</h5>
+                            <a href="/festival/create">야더링 생성</a>
+                            <!-- Table with stripped rows -->
+                            <table class="table datatable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>이름</th>
+                                    <th data-type="date" data-format="YYYY/DD/MM">대회 날짜</th>
+                                    <th data-type="date" >생성일자</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="festival : ${festivals}">
 
-    </table>
-    <ul>
-        <th:block th:unless="${festivals.first}">
-            <li>
-                <a class="page-link" th:href="@{/festivals?page={number}(number=${festivals.number-1})}">이전</a>
-            </li>
-        </th:block>
-        <th:block th:unless="${festivals.last}">
-            <li>
-                <a class="page-link" th:href="@{/festivals?page={number}(number=${festivals.number-1})}">다음</a>
-            </li>
-        </th:block>
-    </ul>
+                                    <td th:text="${festival.id}"></td>
+                                    <td><a th:href="@{/festival/{id}(id=${festival.id})}"><span th:text="${festival.name}"></span></a></td>
+                                    <td th:text="${festival.day}"></td>
+                                    <td th:text="${festival.created_at}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <ul>
+                                <th:block th:unless="${festivals.first}">
+                                    <li>
+                                        <a class="page-link" th:href="@{/festival?page={number}(number=${boards.number-1})}">이전</a>
+                                    </li>
+                                </th:block>
+                                <th:block th:unless="${festivals.last}">
+                                    <li>
+                                        <a class="page-link" th:href="@{/festival?page={number}(number=${boards.number+1})}">다음</a>
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
 </div>
 
 

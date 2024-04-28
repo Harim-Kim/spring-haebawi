@@ -1,41 +1,64 @@
 <!DOCTYPE html>
 <html xmlns:th="http//www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/default_layout}">
+      layout:decorate="~{layouts/layout2}">
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
 <div layout:fragment="content">
-    <h1>게시판 목록</h1>
-    <div class="container">
-        <a href="/board/create">게시물 작성</a>
-        <table>
-            <tr>
-                <th>#</th>
-                <th>제목</th>
-                <th>생성일자</th>
-                <th>작성자</th>
-            </tr>
-            <tr th:each="board : ${boards}">
+    <main id="main" class="main">
 
-                <td th:text="${board.id}"></td>
-                <td><a th:href="@{/board/{id}(id=${board.id})}"><span th:text="${board.title}"></span></a></td>
-                <td th:text="${board.created_at}"></td>
-                <td th:text="${board.user.getNickname()}"></td>
-            </tr>
+        <div class="pagetitle">
+            <h1>게시판</h1>
+        </div><!-- End Page Title -->
 
-        </table>
-        <ul>
-            <th:block th:unless="${boards.first}">
-                <li>
-                    <a class="page-link" th:href="@{/board?page={number}(number=${boards.number-1})}">이전</a>
-                </li>
-            </th:block>
-            <th:block th:unless="${boards.last}">
-                <li>
-                    <a class="page-link" th:href="@{/board?page={number}(number=${boards.number-1})}">다음</a>
-                </li>
-            </th:block>
-        </ul>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">게시판</h5>
+                            <a href="/board/create">게시물 작성</a>
+                            <!-- Table with stripped rows -->
+                            <table class="table datatable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>제목</th>
+                                    <th data-type="date" data-format="YYYY/DD/MM">생성일자</th>
+                                    <th>작성자</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="board : ${boards}">
+
+                                    <td th:text="${board.id}"></td>
+                                    <td><a th:href="@{/board/{id}(id=${board.id})}"><span th:text="${board.title}"></span></a></td>
+                                    <td th:text="${board.created_at}"></td>
+                                    <td th:text="${board.user.getNickname()}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <ul>
+                                <th:block th:unless="${boards.first}">
+                                    <li>
+                                        <a class="page-link" th:href="@{/board?page={number}(number=${boards.number-1})}">이전</a>
+                                    </li>
+                                </th:block>
+                                <th:block th:unless="${boards.last}">
+                                    <li>
+                                        <a class="page-link" th:href="@{/board?page={number}(number=${boards.number+1})}">다음</a>
+                                    </li>
+                                </th:block>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main><!-- End #main -->
 </div>
 
 

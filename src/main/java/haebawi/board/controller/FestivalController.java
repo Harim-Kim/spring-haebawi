@@ -42,7 +42,9 @@ public class FestivalController {
     Create
      */
     @GetMapping("/create")
-    public String create(Model model){
+    public String create(Model model, Principal principal){
+        User currentUser = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("festivalRequest", new FestivalRequest());
         return "festival/create";
     }
@@ -97,6 +99,7 @@ public class FestivalController {
     public String updatePage(@PathVariable("festivalId") Long festivalId,@Valid FestivalRequest festivalRequest, Model model, Principal principal, BindingResult bindingResult){
         Festival festival = festivalService.getFestivalById(festivalId);
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("festivalRequest", festivalRequest);
         model.addAttribute("festivalResponse", festival);
         if(currentUser.getRole() != UserRole.ADMIN){

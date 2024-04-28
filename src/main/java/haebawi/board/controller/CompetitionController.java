@@ -45,7 +45,9 @@ public class CompetitionController {
     Create
      */
     @GetMapping("/create")
-    public String create(Model model){
+    public String create(Model model, Principal principal){
+        User currentUser = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("competitionRequest", new CompetitionRequest());
         return "competition/create";
     }
@@ -98,6 +100,7 @@ public class CompetitionController {
     public String updatePage(@PathVariable("competitionId") Long competitionId, @Valid CompetitionRequest competitionRequest, Model model, Principal principal, BindingResult bindingResult){
         Competition competition = competitionService.getCompetitionById(competitionId);
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("competitionRequest", competitionRequest);
         model.addAttribute("competitionResponse", competition);
         if(currentUser.getRole() != UserRole.ADMIN){

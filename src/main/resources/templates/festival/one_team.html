@@ -5,6 +5,7 @@
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
 <div layout:fragment="content">
+    <main id="main" class="main">
     <h1 th:text="${teamResponse.team_name}"></h1>
 
     <div>
@@ -103,6 +104,7 @@
     <div>
         <a th:href="@{/festival/{id}(id=${festivalId})}">뒤로가기</a>
     </div>
+    </main>
 </div>
 
 

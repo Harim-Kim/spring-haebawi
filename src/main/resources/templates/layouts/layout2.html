@@ -32,9 +32,9 @@
 <body>
 
 <div th:replace="fragments/header::header"></div>
-
+<main id="main" class="main">
 <div layout:fragment="content"  ></div>
-
+</main>
 <div th:replace="fragments/footer::footer"></div>
 <!-- 각 페이지의 script가 작성될 위치 -->
 <th:block layout:fragment="script">

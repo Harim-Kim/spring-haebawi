@@ -35,7 +35,9 @@ public class BoardController {
     read
      */
     @GetMapping({"","/"})
-    public String indexList(Model model, @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC)Pageable pageable){
+    public String indexList(Model model, @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC)Pageable pageable, Principal principal){
+        User user = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", user);
         model.addAttribute("boards", boardService.boardList(pageable));
         return "board/index";
     }
@@ -53,7 +55,9 @@ public class BoardController {
     create
      */
     @GetMapping("/create")
-    public String create(Model model){
+    public String create(Model model, Principal principal){
+        User user = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", user);
         model.addAttribute("boardRequest", new BoardRequest());
         return "board/create";
     }
@@ -78,6 +82,7 @@ public class BoardController {
         if (bindingResult.hasErrors()){
             return "board/create";
         }
+
 //        return "redirect:/board";
         redirectAttributes.addAttribute("boardId", boardId);
         return "redirect:/board/{boardId}";
@@ -90,6 +95,7 @@ public class BoardController {
     public String updatePage(@PathVariable("boardId") Long boardId,@Valid BoardRequest boardRequest, Model model, Principal principal, BindingResult bindingResult){
         Board board = boardService.getBoardById(boardId);
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("boardRequest", boardRequest);
         model.addAttribute("boardResponse", board);
         if(!board.getUser().equals(currentUser)){
