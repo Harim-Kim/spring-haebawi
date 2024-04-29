@@ -24,8 +24,8 @@
         </div>
         <div>
             <label th:for="description">설명 : </label>
-            <input type="text" th:field="*{description}" th:errorclass="error-input" th:value="${festivalResponse.description}"/>
-            <div class="error-class" th:errors="*{description}"></div>
+            <textarea class="tinymce-editor form-control" id="content" th:field="*{description}"  th:errorclass="error-input" th:utext="${festivalResponse.description}"></textarea>
+            <div class="error-class alert alert-danger" th:errors="*{description}"  role="alert"></div>
         </div>
         <button type="submit">수정</button>
     </form>

@@ -5,7 +5,6 @@
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
 <div layout:fragment="content">
-    <main id="main" class="main">
         <form th:method="post" th:action="|/festival/create|" th:object="${festivalRequest}">
             <div>
                 <label th:for="title">대회명 : </label>
@@ -24,14 +23,12 @@
             </div>
             <div>
                 <label th:for="description">설명 : </label>
-                <input type="text" th:field="*{description}" th:errorclass="error-input"  class="form-control" />
+                <textarea class="tinymce-editor form-control" id="content" th:field="*{description}"  th:errorclass="error-input" ></textarea>
                 <div class="error-class alert alert-danger" th:errors="*{description}"  role="alert"></div>
             </div>
             <br/>
             <button type="submit">생성</button>
         </form>
-    </main>
-
 </div>
 
 

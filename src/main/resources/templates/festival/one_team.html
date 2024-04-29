@@ -5,7 +5,6 @@
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
 <div layout:fragment="content">
-    <main id="main" class="main">
     <h1 th:text="${teamResponse.team_name}"></h1>
 
     <div>
@@ -23,9 +22,7 @@
                 <th>#</th>
                 <th:block th:each="user : ${teamResponse.getUser()}">
                     <th th:text="${user}"></th>
-                    <!--                    <th th:text="${user}"></th>-->
                 </th:block>
-                <!--      #,  김하림,장석민,전우진,김은아,양재헌,조건우-->
             </tr>
             </thead>
             <tbody>
@@ -33,7 +30,6 @@
                 <td th:text="${section}"></td>
                 <th:block th:each=" round : ${teamResponse.GetScoreSection(section)}">
                     <td>
-                        <!--                        <a id="scroceWin" th:href="@{/festival/{id}/team/{teamId}/score?section={section}&index={index}(id=${festivalResponse.id}, teamId=${teamResponse.id}, section=${section}, index=${scoreStat.index})}">-->
                         <span th:text="${round.getFestival_score()}"></span>
 
                     </td>
@@ -104,7 +100,6 @@
     <div>
         <a th:href="@{/festival/{id}(id=${festivalId})}">뒤로가기</a>
     </div>
-    </main>
 </div>
 
 
