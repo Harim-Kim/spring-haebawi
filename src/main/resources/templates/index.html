@@ -74,7 +74,43 @@
                 </div>
             </div>
             <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="/festival/">야더링 파티</a></h5>
+                        <!-- Table with stripped rows -->
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">이름</th>
+                                <th scope="col" data-type="date" data-format="YYYY/DD/MM">대회 날짜</th>
+                                <th scope="col" data-type="date" >생성일자</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="festival : ${festivals}">
 
+                                <th scope="row" th:text="${festival.id}"></th>
+                                <td><a th:href="@{/festival/{id}(id=${festival.id})}"><span th:text="${festival.name}"></span></a></td>
+                                <td th:text="${festival.day}"></td>
+                                <td th:text="${festival.created_at}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <ul>
+                            <th:block th:unless="${festivals.first}">
+                                <li>
+                                    <a class="page-link" th:href="@{/festival?page={number}(number=${boards.number-1})}">이전</a>
+                                </li>
+                            </th:block>
+                            <th:block th:unless="${festivals.last}">
+                                <li>
+                                    <a class="page-link" th:href="@{/festival?page={number}(number=${boards.number+1})}">다음</a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
