@@ -5,7 +5,6 @@
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
 <div layout:fragment="content">
-    <main id="main" class="main">
     <form th:method="post" th:action="|/board/${festivalResponse.id}|" th:object="${festivalRequest}">
         <div>
             <label th:for="title">대회명 : </label>
@@ -29,7 +28,6 @@
         </div>
         <button type="submit">수정</button>
     </form>
-    </main>
 </div>
 
 
