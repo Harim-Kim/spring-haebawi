@@ -22,10 +22,12 @@ import java.util.*;
 public class FestivalService {
 
     private final FestivalRepository festivalRepository;
-    private final UserRepository userRepository;
     private final TeamRepository teamRepository; // festival에 종속적이므로 teamService 생성안함.
     private final RoundRepository roundRepository;
 
+
+    public List<Festival> findAll(){ return festivalRepository.findAll() ;}
+    public List<Festival> findLast(){return festivalRepository.findTop10By();}
     @Transactional
     public Page<Festival> festivalList(Pageable pageable){
         return festivalRepository.findAll(pageable);

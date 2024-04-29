@@ -31,8 +31,8 @@ public class FestivalController {
     private final FestivalService festivalService;
 
     @GetMapping({"","/"})
-    public String indexList(Model model, @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC) Pageable pageable, Principal principal){
-        model.addAttribute("festivals", festivalService.festivalList(pageable));
+    public String indexList(Model model, Principal principal){
+        model.addAttribute("festivals", festivalService.findAll());
         User user = userService.getLoginUserByLoginId(principal.getName());
         model.addAttribute("currentUser", user);
         return "festival/index";

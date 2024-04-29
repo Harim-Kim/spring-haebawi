@@ -63,7 +63,9 @@ public class BoardService {
     public List<Board> findAll(){
         return boardRepository.findAll();
     }
-
+    public List<Board> findLast(){
+        return boardRepository.findTop10By();
+    }
     @Transactional
     public Page<Board> boardList(Pageable pageable){
         return boardRepository.findAll(pageable);
