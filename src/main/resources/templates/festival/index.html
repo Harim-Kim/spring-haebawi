@@ -38,18 +38,6 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <ul>
-                                <th:block th:unless="${festivals.first}">
-                                    <li>
-                                        <a class="page-link" th:href="@{/festival?page={number}(number=${boards.number-1})}">이전</a>
-                                    </li>
-                                </th:block>
-                                <th:block th:unless="${festivals.last}">
-                                    <li>
-                                        <a class="page-link" th:href="@{/festival?page={number}(number=${boards.number+1})}">다음</a>
-                                    </li>
-                                </th:block>
-                            </ul>
                         </div>
                     </div>
 

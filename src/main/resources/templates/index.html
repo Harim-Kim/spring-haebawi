@@ -90,25 +90,13 @@
                             <tbody>
                             <tr th:each="festival : ${festivals}">
 
-                                <th scope="row" th:text="${festival.id}"></th>
+                                <th scope="rowt -" th:text="${festival.id}"></th>
                                 <td><a th:href="@{/festival/{id}(id=${festival.id})}"><span th:text="${festival.name}"></span></a></td>
                                 <td th:text="${festival.day}"></td>
                                 <td th:text="${festival.created_at}"></td>
                             </tr>
                             </tbody>
                         </table>
-                        <ul>
-                            <th:block th:unless="${festivals.first}">
-                                <li>
-                                    <a class="page-link" th:href="@{/festival?page={number}(number=${boards.number-1})}">이전</a>
-                                </li>
-                            </th:block>
-                            <th:block th:unless="${festivals.last}">
-                                <li>
-                                    <a class="page-link" th:href="@{/festival?page={number}(number=${boards.number+1})}">다음</a>
-                                </li>
-                            </th:block>
-                        </ul>
                     </div>
                 </div>
             </div>
