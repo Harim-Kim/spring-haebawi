@@ -38,6 +38,7 @@ public class SecurityConfig {
                         .requestMatchers("/user/info").authenticated()
                         .requestMatchers("/festival/**").authenticated()
                         .requestMatchers("/board/**").authenticated()
+                        .requestMatchers("/member/**").hasAnyAuthority(UserRole.ADMIN.name())
                         .requestMatchers("/user/admin/**").hasAnyAuthority(UserRole.ADMIN.name())
                         .anyRequest().permitAll()
                 )

@@ -40,58 +40,41 @@
     </div>
     <div>
         <h2>팀 점수 입력</h2>
-        <form th:method="post" th:action="|/festival/${festivalId}/team/${teamResponse.id}/score|"  id="form_score" class="form-controll"><button type="submit" id="submit_score">점수등록</button>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th:block th:each="user : ${teamResponse.getUser()}">
-                        <th th:text="${user}"></th>
-                        <!--                        <th th:text="${user}"></th>-->
-                    </th:block>
-                    <!--      #,  김하림,장석민,전우진,김은아,양재헌,조건우-->
-                </tr>
-                </thead>
-                <tbody>
-                <tr  th:each="section : ${#numbers.sequence(1,sectionNum )}">
-                    <td th:text="${section}"></td>
-                    <th:block th:each=" round : ${teamResponse.GetScoreSection(section)}">
-                        <td >
-                            <!--                        <a id="scroceWin" th:href="@{/festival/{id}/team/{teamId}/score?section={section}&index={index}(id=${festivalResponse.id}, teamId=${teamResponse.id}, section=${section}, index=${scoreStat.index})}">-->
-                            <!--                            <span th:text="${round.getFestival_score()}"></span>-->
-                            <input type="text" th:value="${round.getFestival_score()}" th:name="|${section}-${roundStat.index}|">
-                        </td>
-                    </th:block>
-                </tr>
-                </tbody>
-            </table>
-        </form>
+        <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name()) || #strings.equals('CAPTIN', currentUser.role.name())  }">
+            <div>
+                <form th:method="post" th:action="|/festival/${festivalId}/team/${teamResponse.id}/score|"  id="form_score" class="form-controll"><button type="submit" id="submit_score">점수등록</button>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th:block th:each="user : ${teamResponse.getUser()}">
+                                <th th:text="${user}"></th>
+                                <!--                        <th th:text="${user}"></th>-->
+                            </th:block>
+                            <!--      #,  김하림,장석민,전우진,김은아,양재헌,조건우-->
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr  th:each="section : ${#numbers.sequence(1,sectionNum )}">
+                            <td th:text="${section}"></td>
+                            <th:block th:each=" round : ${teamResponse.GetScoreSection(section)}">
+                                <td >
+                                    <!--                        <a id="scroceWin" th:href="@{/festival/{id}/team/{teamId}/score?section={section}&index={index}(id=${festivalResponse.id}, teamId=${teamResponse.id}, section=${section}, index=${scoreStat.index})}">-->
+                                    <!--                            <span th:text="${round.getFestival_score()}"></span>-->
+                                    <input type="text" th:value="${round.getFestival_score()}" th:name="|${section}-${roundStat.index}|">
+                                </td>
+                            </th:block>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </th:block>
+        <th:block th:if="${#strings.equals('USER', currentUser.role.name()) }">
+            <p>점수 입력 권한이 없습니다. 조장 혹은 관리자에게 문의하세요</p>
+        </th:block>
 
 
-        <script th:inline="javascript">
-            // $(function(){
-            //     $('#submit_score').on("click", function(){
-            //
-            //         var form_score = $("#form_score").serialize();
-            //         var festivalId = [[${festivalId}]]
-            //         var teamId = [[${teamResponse.id}]]
-            //         var urlScore = "/festival/" + festivalId + "/team" + teamId + "/score"
-            //         console.log(form_score);
-            //         $.ajax({
-            //             type: "post",
-            //             url: urlScore,
-            //             data: form_score,
-            //             dataType: 'json',
-            //             success: function(html){
-            //                 location.reload();
-            //             },
-            //             error: function (request, status, error){
-            //                 console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-            //             }
-            //         });
-            //     });
-            // });
-        </script>
     </div>
 
 

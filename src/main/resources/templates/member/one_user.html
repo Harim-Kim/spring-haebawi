@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http//www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout2}">
+<!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
-</body>
+<div layout:fragment="content">
+        <h1 th:text="${boardResponse.title}"></h1>
+        <div>
+            <span th:text="${boardResponse.created_at}"></span>
+        </div>
+        <div>
+            <span th:text="${boardResponse.updated_at}"></span>
+        </div>
+        <div>
+            <span th:text="${boardResponse.updated_at}"></span>
+        </div>
+        <div>
+            <span th:text="${boardResponse.user.getNickname()}"></span>
+        </div>
+        <div>
+            <a href="/board">목록으로</a>
+        </div>
+        <th:block th:if="${author}">
+            <div>
+                <form action="#" th:action="|/board/${boardResponse.id}|" method="#" th:method="delete">
+                    <button type="submit" class="badge">삭제</button>
+                </form>
+                <a data-confirm="Are you sure?" th:href="@{/board/{id}/update(id=${boardResponse.id})}" rel="nofollow">update</a>
+            </div>
+        </th:block>
+        <th:block th:if="${error}">
+            <p th:text="${error}"> </p>
+        </th:block>
+        <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name())}">
+            <form action="#" th:action="|/board/${boardResponse.id}|" method="#" th:method="delete">
+                <button type="submit" class="badge">삭제</button>
+            </form>
+        </th:block>
+
+        <div>
+            <p th:utext="${boardResponse.content}"></p>
+        </div>
+
+
+
+
+
+</div>
+
+
 </html>

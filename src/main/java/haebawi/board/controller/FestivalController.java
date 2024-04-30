@@ -181,7 +181,7 @@ public class FestivalController {
     @PostMapping("/{festivalId}/team/{teamId}/score")
     public String scoreUpdate(@PathVariable("festivalId") Long festivalId, @PathVariable("teamId") Long teamId, @RequestParam Map<String, String> data, RedirectAttributes redirectAttributes){
 
-        System.out.println(data); //{1-0=11, 1-1=22, 1-2=33, 2-0=66, 2-1=55, 2-2=44}
+//        System.out.println(data); //{1-0=11, 1-1=22, 1-2=33, 2-0=66, 2-1=55, 2-2=44}
         int result = festivalService.scoreUpdate(data, teamId, festivalId);
         if (result == 0){
             // 에러 작업

@@ -5,7 +5,6 @@
 <!--html 태그에 넣을 수도 있음!! layout:fragment="content"-->
 
 <div layout:fragment="content">
-    <main id="main" class="main">
     <h1 th:text="${boardResponse.title}"></h1>
     <div>
         <span th:text="${boardResponse.created_at}"></span>
@@ -79,7 +78,6 @@
             </th:block>
         </ul>
     </div>
-    </main>
 </div>
 
 

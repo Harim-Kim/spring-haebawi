@@ -1,42 +1,33 @@
 package haebawi.board.controller;
 
 
-import haebawi.board.domain.UserRole;
-import haebawi.board.domain.dto.FestivalRequest;
-import haebawi.board.domain.dto.ReplyRequest;
-import haebawi.board.domain.entity.Board;
-import haebawi.board.domain.entity.Festival;
 import haebawi.board.domain.entity.User;
 import haebawi.board.service.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Map;
+import java.util.logging.Level;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/member")
 public class UserController {
-
+    private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
     private final UserService userService;
     @GetMapping({"","/"})
     public String indexList(Model model, Principal principal){ // @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC)Pageable pageable,
-        if (checkAdmin(principal)){
+        if (!checkAdmin(principal)){
             return "redirect:/";
         }
         User user = userService.getLoginUserByLoginId(principal.getName());
         model.addAttribute("currentUser", user);
-        model.addAttribute("boards", userService.findAll());
+        model.addAttribute("users", userService.findAll());
         return "member/user_list";
     }
 
@@ -50,6 +41,15 @@ public class UserController {
         User currentUser = userService.getLoginUserByLoginId(principal.getName());
         model.addAttribute("currentUser", currentUser);
         return "member/one_user";
+    }
+
+    @PostMapping("/changeRole")
+    public String chageRole( @RequestParam Map<String, String> data){
+        System.out.println(data+"@@@@@@@@@@@@@@@@@@@@@@@");
+        log.warn("@@@@@@@@@@@@@@@@@@");
+        log.warn(data.toString());
+        log.warn("@@@@@@@@@@@@@@@@@@");
+        return "redirect:/member/";
     }
 //    @PostMapping("/{userId}")
 //    public String update(@PathVariable("userId") Long userId, @Valid UserReq festivalRequest, Model model, Principal principal, BindingResult bindingResult, RedirectAttributes redirectAttributes){
@@ -71,7 +71,7 @@ public class UserController {
 //    }
     private boolean checkAdmin(Principal principal){
         User user = userService.getLoginUserByLoginId(principal.getName());
-        if (user.getRole() == UserRole.ADMIN){
+        if (user.getRole().name().equals("ADMIN") ){
             return true;
         }
         return false;
