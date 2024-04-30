@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -33,7 +35,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String board(@PathVariable("userId") Long userId, Model model, Principal principal){
-        if (checkAdmin(principal)){
+        if (!checkAdmin(principal)){
             return "redirect:/";
         }
         User user = userService.getLoginUserById(userId);
@@ -45,30 +47,15 @@ public class UserController {
 
     @PostMapping("/changeRole")
     public String chageRole( @RequestParam Map<String, String> data){
-        System.out.println(data+"@@@@@@@@@@@@@@@@@@@@@@@");
-        log.warn("@@@@@@@@@@@@@@@@@@");
-        log.warn(data.toString());
-        log.warn("@@@@@@@@@@@@@@@@@@");
+        log.warn("@@@@@@@@@");
+        log.warn(data.toString());//{role-1=, role-2=, role-3=USER}
+        int result = userService.updateRole(data);
+        if (result != 0){
+//            bindingResult.addError(new FieldError("error", ));
+        }
         return "redirect:/member/";
     }
-//    @PostMapping("/{userId}")
-//    public String update(@PathVariable("userId") Long userId, @Valid UserReq festivalRequest, Model model, Principal principal, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-//        User user = userService.getLoginUserById(userId);
-//        User currentUser = userService.getLoginUserByLoginId(principal.getName());
-//        if(currentUser.getRole() != UserRole.ADMIN){
-//            bindingResult.addError(new ObjectError("festivalResponse", "admin이 아닙니다."));
-//            return "redirect:festival";
-//        }
-//        if(festivalRequest.getName() == null || festivalRequest.getName().isEmpty()){
-//            bindingResult.addError(new FieldError("festivalRequest","name", "이름을 입력해주세요"));
-//        }
-//        if(bindingResult.hasErrors()){
-//            return "festival/update";
-//        }
-//        festivalService.update(festivalId, festivalRequest);
-//        redirectAttributes.addAttribute("festivalId", festivalId);
-//        return "redirect:/festival/{festivalId}";
-//    }
+
     private boolean checkAdmin(Principal principal){
         User user = userService.getLoginUserByLoginId(principal.getName());
         if (user.getRole().name().equals("ADMIN") ){

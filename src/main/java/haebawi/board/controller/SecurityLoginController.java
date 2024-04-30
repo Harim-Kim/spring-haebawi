@@ -104,7 +104,7 @@ public class SecurityLoginController {
             return "redirect:/user/login";
         }
 
-        model.addAttribute("user", loginUser);
+        model.addAttribute("currentUser", loginUser);
         return "info";
     }
 

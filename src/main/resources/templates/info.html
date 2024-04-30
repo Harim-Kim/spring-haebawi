@@ -9,9 +9,9 @@
 <div layout:fragment="content">
     <h2>유저 정보</h2>
     <div>
-        <div th:text="|loginId : ${user.loginId}|"/>
-        <div th:text="|nickname : ${user.nickname}|"/>
-        <div th:text="|role : ${user.role}|"/>
+        <div th:text="|loginId : ${currentUser.loginId}|"/>
+        <div th:text="|nickname : ${currentUser.nickname}|"/>
+        <div th:text="|role : ${currentUser.role}|"/>
     </div>
 </div>
 

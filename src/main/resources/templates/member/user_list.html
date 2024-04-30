@@ -34,21 +34,19 @@
                                         <td><a th:href="@{/member/{id}(id=${user.id})}"><span th:text="${user.loginId}"></span></a></td>
                                         <td th:text="${user.nickname}"></td>
                                         <td>
-                                            <input type="hidden" th:value="${user.id}" name="user_id">
-
-                                            <select name="role" >
+                                            <select th:name="|role-${user.id}|" >
                                                 <th:block th:if="${#strings.equals('USER', user.role.name())}">
-                                                    <option th:value="${user.role.name()}">일반</option>
-                                                    <option th:value="CAPTIN">조장</option>
+                                                    <option value="">일반</option>
+                                                    <option th:value="CAP">조장</option>
                                                     <option th:value="ADMIN">관리자</option>
                                                 </th:block>
                                                 <th:block th:if="${#strings.equals('ADMIN', user.role.name())}">
-                                                    <option th:value="${user.role.name()}">관리자</option>
+                                                    <option value="">관리자</option>
                                                     <option th:value="USER">일반</option>
-                                                    <option th:value="CAPTIN">조장</option>
+                                                    <option th:value="CAP">조장</option>
                                                 </th:block>
-                                                <th:block th:if="${#strings.equals('CAPTIN', user.role.name())}">
-                                                    <option th:value="${user.role.name()}">조장</option>
+                                                <th:block th:if="${#strings.equals('CAP', user.role.name())}">
+                                                    <option value="">조장</option>
                                                     <option th:value="USER">일반</option>
                                                     <option th:value="ADMIN">관리자</option>
                                                 </th:block>

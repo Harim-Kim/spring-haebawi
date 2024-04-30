@@ -1,6 +1,7 @@
 package haebawi.board.service;
 
 
+import haebawi.board.domain.UserRole;
 import haebawi.board.domain.dto.JoinRequest;
 import haebawi.board.domain.dto.LoginRequest;
 import haebawi.board.domain.entity.User;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -113,4 +115,30 @@ public class UserService {
     }
 
     public List<User> findAll(){ return userRepository.findAll(); }
+
+    public int updateRole(Map<String, String> data){
+        for (Map.Entry<String, String> entrySet : data.entrySet()){
+            String[] userData = entrySet.getKey().split("-");
+            String user_id = userData[1];
+            String role = entrySet.getValue();
+            if (role.isEmpty()){
+                continue;
+            }
+            long userId;
+            try{
+                userId = Long.parseLong(user_id);
+                User user = userRepository.findById(userId).orElseThrow(()->{
+                    return new IllegalArgumentException("해당 유저를 찾을 수 없습니다.");
+                });
+                UserRole newRole = UserRole.valueOf(role);
+                user.setRole(newRole);
+                userRepository.save(user);
+
+            }catch (Exception e){
+                e.printStackTrace();
+                return 1;
+            }
+        }
+        return 0;
+    }
 }

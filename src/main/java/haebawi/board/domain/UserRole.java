@@ -1,5 +1,5 @@
 package haebawi.board.domain;
 
 public enum UserRole {
-    USER, ADMIN, CAPTIN;
+    USER, ADMIN, CAP;
 }

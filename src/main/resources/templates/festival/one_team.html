@@ -40,7 +40,7 @@
     </div>
     <div>
         <h2>팀 점수 입력</h2>
-        <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name()) || #strings.equals('CAPTIN', currentUser.role.name())  }">
+        <th:block th:if="${#strings.equals('ADMIN', currentUser.role.name()) || #strings.equals('CAP', currentUser.role.name())  }">
             <div>
                 <form th:method="post" th:action="|/festival/${festivalId}/team/${teamResponse.id}/score|"  id="form_score" class="form-controll"><button type="submit" id="submit_score">점수등록</button>
                     <table class="table">
