@@ -32,7 +32,7 @@ public class User {
     @NotBlank
     private String password;
 
-    @Column
+    @Column(unique = true)
     @NotBlank
     private String nickname;
 
